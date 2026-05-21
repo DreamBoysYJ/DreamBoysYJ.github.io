@@ -5,3 +5,12 @@ dist
 .env
 .env.local
 npm-debug.log*
+
+# Old GitHub Pages/Jekyll leftovers kept in the remote history.
+.bundle
+vendor
+Gemfile.lock
+.jekyll-cache
+.jekyll-metadata
+_site
+*.gem

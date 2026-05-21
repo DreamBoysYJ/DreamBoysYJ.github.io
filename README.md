@@ -52,8 +52,6 @@ npm run build
 Actions 변수는 선택 사항입니다.
 
 ```text
-SITE_URL=https://사용자명.github.io
-BASE_PATH=/저장소명/
+SITE_URL=https://dreamboysyj.github.io
+BASE_PATH=/
 ```
-
-사용자 페이지 저장소(`사용자명.github.io`)라면 `BASE_PATH=/`로 둡니다.
