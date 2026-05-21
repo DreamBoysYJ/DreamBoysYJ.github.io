@@ -1,0 +1,52 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const posts = (await getCollection("posts"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const latest = posts[0];
+---
+
+<BaseLayout>
+  <section class="home-hero">
+    <div class="home-hero-copy">
+      <p class="eyebrow">GitHub Markdown Archive</p>
+      <h1>Velog에서 쓰고, 여기서 원본이 된다.</h1>
+      <p>
+        개발자를 먼저 생각하되 일반인도 따라올 수 있게. 기술은 검증하고,
+        말투와 농담은 살려서 남긴다.
+      </p>
+    </div>
+    {
+      latest?.data.heroImage && (
+        <a class="feature-link" href={`/posts/${latest.id}/`} aria-label={`${latest.data.title} 읽기`}>
+          <img src={latest.data.heroImage} alt={latest.data.heroAlt || ""} />
+          <span>Latest</span>
+        </a>
+      )
+    }
+  </section>
+
+  <section class="post-list" aria-label="Posts">
+    {posts.map((post) => (
+      <article class="post-card">
+        <div>
+          <p class="post-meta">
+            {post.data.pubDate.toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "short",
+              day: "numeric"
+            })}
+          </p>
+          <h2><a href={`/posts/${post.id}/`}>{post.data.title}</a></h2>
+          <p>{post.data.description}</p>
+        </div>
+        <div class="tag-row">
+          {post.data.tags.map((tag: string) => <a href={`/tags/${tag}/`}>#{tag}</a>)}
+        </div>
+      </article>
+    ))}
+  </section>
+</BaseLayout>

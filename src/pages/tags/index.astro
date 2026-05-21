@@ -1,0 +1,17 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const posts = (await getCollection("posts")).filter((post) => !post.data.draft);
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) => a.localeCompare(b, "ko"));
+---
+
+<BaseLayout title="태그" description="글을 태그별로 훑어봅니다.">
+  <section class="page-head">
+    <p class="eyebrow">Tags</p>
+    <h1>태그</h1>
+  </section>
+  <section class="tag-cloud" aria-label="Tags">
+    {tags.map((tag) => <a href={`/tags/${tag}/`}>#{tag}</a>)}
+  </section>
+</BaseLayout>

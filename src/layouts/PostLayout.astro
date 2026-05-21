@@ -1,0 +1,51 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const hasToc = headings.length > 1;
+const formattedDate = post.data.pubDate.toLocaleDateString("ko-KR", {
+  year: "numeric",
+  month: "long",
+  day: "numeric"
+});
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} image={post.data.heroImage}>
+  <article class="post-shell">
+    <header class="post-hero">
+      {
+        post.data.heroImage && (
+          <img src={post.data.heroImage} alt={post.data.heroAlt || ""} />
+        )
+      }
+      <div class="post-hero-copy">
+        <p class="eyebrow">{formattedDate}</p>
+        <h1>{post.data.title}</h1>
+        <p class="lead">{post.data.description}</p>
+        <div class="tag-row" aria-label="Tags">
+          {post.data.tags.map((tag: string) => <a href={`/tags/${tag}/`}>#{tag}</a>)}
+        </div>
+      </div>
+    </header>
+
+    <div class={`post-layout ${hasToc ? "" : "no-toc"}`}>
+      {
+        hasToc && (
+          <aside class="toc" aria-label="Table of contents">
+            <p>목차</p>
+            {headings.map((heading) => (
+              <a href={`#${heading.slug}`} class={`depth-${heading.depth}`}>
+                {heading.text}
+              </a>
+            ))}
+          </aside>
+        )
+      }
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
